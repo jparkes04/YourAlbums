@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h1>Albums</h1>
+    </div>
+    
+    <!-- Display all albums as a grid of cards -->
+    <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
+    <div class="row justify-content-center">
+    
+        <!-- Button card for adding album -->
+        <button type="button" class="btn btn-primary m-1" style="width: 18rem;">+ Add Album</button>
+
+        <!-- List albums -->
+        {% for album in albums %}
+            <div class="card m-1" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ album.title }}</h5>
+                    <p class="card-text">{{ album.artist }}</p>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ album.year }}</h6>
+                    <a href="#" class="card-link">Edit</a>
+                    <a href="#" class="card-link">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+
+
+
+    </div>
+</div>
+
+{% endblock %}

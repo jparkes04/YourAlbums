@@ -1,5 +1,5 @@
 from app import db
-
+from flask_login import UserMixin
 
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,7 +17,7 @@ favourites_association_table = db.Table(
 )
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(500))

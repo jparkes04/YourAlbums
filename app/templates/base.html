@@ -9,20 +9,17 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
 		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<!-- Custom CSS -->
 	<link rel="stylesheet" href="../static/style.css">
 
-	<!-- Display default title if no title is passed to template -->
-	{% if title %}
-		<title>{{ title }}</title>
-	{% else %}
-		<title>YourAlbums</title>
-	{% endif %}
+	<title>YourAlbums</title>
 </head>
 
 <body>
-	<!-- Render Navbar -->
-	<!-- Code adapted from source https://getbootstrap.com/docs/4.0/components/navbar/ -->
-	<nav class="navbar navbar-expand-sm navbar-light bg-dark mb-3">
+	<!-- Navigation bar -->
+	<!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
+	<nav class="navbar navbar-expand-sm navbar-light bg-light">
 		<a class="navbar-brand" href="/">YourAlbums</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,34 +27,51 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
+				<!-- Permanent elements -->
 				<li class="nav-item">
 					<a class="nav-link" href="/">Home</a>
 				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" href="/albums">Albums</a>
+				</li>
+				
+				<!-- Conditional elements -->
+				{% if current_user.is_authenticated %}
+					<!-- User is signed in -->
+					<li class="nav-item">
+						<a class="nav-link" href="/logout">Logout</a>
+					</li>
+				{% else %}
+					<!-- User is not signed in -->
+					<li class="nav-item">
+						<a class="nav-link" href="/register">Register</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/login">Login</a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</nav>
 
-	<!-- Dislpay any flashed messages -->
-	<div class="row justify-content-center mb-0">
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-		<ul class="justify-content-center mb-0 mt-2 pl-0">
-			{% for message in messages %}
-			<div class="alert alert-primary mb-0" role="alert">
-				{{ message }}
-			</div>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% endwith %}
-	</div>
+	<!-- Dislpay flashed messages in a banner -->
+	{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		{% for message in messages %}
 
-	<!-- Render Page Content -->
+		<div class="alert-banner">
+			<p>{{ message }}</p>
+		</div>
 
-	<div class="container-fluid">
+		{% endfor %}
+	{% endif %}
+	{% endwith %}
+
+	<!-- Display content template in container -->
+	<div class="content-margin">
 		{% block content %}{% endblock %}
 	</div>
-
 
 	<!-- Bootstrap js -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
