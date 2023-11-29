@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h1>Album</h1>
+    </div>
+    
+    <div class="row justify-content-center">
+        <!-- Album form -->
+        <form action="" method="post" name="album">
+            {{form.hidden_tag()}}
+            <div class="form-group">
+                {{ form.title.label }}
+                {{ form.title(
+                    class="form-control",
+                    tabindex=1    
+                ) }}
+            </div>
+    
+            <div class="form-group">
+                {{ form.artist.label }}
+                {{ form.artist(
+                    class="form-control",
+                    tabindex=2    
+                ) }}
+            </div>
+
+            <div class="form-group">
+                {{ form.year.label }}
+                {{ form.year(
+                    class="form-control",
+                    tabindex=3   
+                ) }}
+            </div>
+    
+            <input type="submit" class="form-control" tabindex=4 value="Save"/>
+        </form>
+    </div>
+
+    {% if album %}
+        <div class="row justify-content-left">
+            <h1>Tracks</h1>
+        </div>
+
+        <div class="row justify-content-left">
+            <!-- Add track button -->
+            <a href="/track" class="btn btn-primary">Add Track</a>
+        </div>
+
+        <div class="row justify-content-center">
+            <!-- Table of tracks -->
+            <table class="table table-responsive-md">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col text-right">Runtime</th>
+                        <th scope="col text-right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for track in tracks %}
+                    <tr>
+                        <th scope="row">{{ track.position }}</th>
+                        <td>{{ track.name }}</td>
+                        <td class="text-right">{{ track.runtime }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

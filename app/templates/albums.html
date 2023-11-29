@@ -11,7 +11,7 @@
     <div class="row justify-content-center">
     
         <!-- Button card for adding album -->
-        <button type="button" class="btn btn-primary m-1" style="width: 18rem;">+ Add Album</button>
+        <a type="button" class="btn btn-primary m-1" style="width: 18rem;" href="/album">+ Add Album</a>
 
         <!-- List albums -->
         {% for album in albums %}
@@ -20,8 +20,8 @@
                     <h5 class="card-title">{{ album.title }}</h5>
                     <p class="card-text">{{ album.artist }}</p>
                     <h6 class="card-subtitle mb-2 text-muted">{{ album.year }}</h6>
-                    <a href="#" class="card-link">Edit</a>
-                    <a href="#" class="card-link">Delete</a>
+                    <a href="/album/{{album.id}}" class="card-link">Edit</a>
+                    <a href="/delete_album/{{album.id}}" class="card-link">Delete</a>
                 </div>
             </div>
         {% endfor %}

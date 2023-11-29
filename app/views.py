@@ -1,7 +1,7 @@
 from flask import render_template, flash, request, redirect
 from app import app, db, models, login_manager
 from flask_login import login_user, login_required, logout_user, current_user
-from .forms import FlaskForm, RegisterLoginForm
+from .forms import FlaskForm, RegisterLoginForm, AlbumForm
 
 # Authentication
 
@@ -66,10 +66,14 @@ def home():
         return user()
     return render_template('home.html', title='Home')
 
+# User
+
 @app.route('/user', methods=['GET','POST'])
 @login_required
 def user():
     return render_template('user.html')
+
+# Albums
 
 @app.route('/albums')
 def albums():
@@ -77,3 +81,59 @@ def albums():
 
     return render_template('albums.html',
                             albums=albums)
+
+# Create
+@app.route('/album', methods=['GET','POST'])
+@login_required
+def create_album():
+    form = AlbumForm()
+
+    if form.validate_on_submit():
+        album = models.Album(
+            title=form.title.data,
+            artist=form.artist.data,
+            year=form.year.data
+        )
+
+        db.session.add(album)
+        db.session.commit()
+
+        flash(f'Album {album.title} added to database!')
+        return redirect(f'/album/{album.id}')
+
+    return render_template('album.html',
+                            form=form)
+
+# Edit
+@app.route('/album/<int:id>', methods=['GET','POST'])
+@login_required
+def edit_album(id):
+    form = AlbumForm()
+
+    album = models.Album.query.get(id)
+    tracks = models.Track.query.filter_by(album_id=album.id).all()
+
+    form = AlbumForm(obj=album)
+
+    if form.validate_on_submit():
+        album.title=form.title.data
+        album.artist=form.artist.data
+        album.year=form.year.data
+        db.session.commit()
+
+        flash('Album updated!')
+        return redirect(f'/album/{id}')
+
+    return render_template('album.html',
+                            form=form,
+                            album=album,
+                            tracks=tracks)
+
+# Delete
+@app.route('/delete_album/<int:id>', methods=['GET','POST'])
+@login_required
+def delete_album(id):
+    album = models.Album.query.get(id)
+    db.session.delete(album)
+    db.session.commit()
+    return albums()
