@@ -65,14 +65,16 @@ def logout():
 def home():
     if current_user.is_authenticated:
         return user()
-    return render_template('home.html', title='Home')
+    return render_template('home.html')
 
 # User
 
 @app.route('/user', methods=['GET','POST'])
 @login_required
 def user():
-    return render_template('user.html')
+    favourites = current_user.favourite_albums.all()
+    return render_template('user.html',
+                           favourites=favourites)
 
 # Albums
 
@@ -109,10 +111,13 @@ def create_album():
 @app.route('/album/<int:id>', methods=['GET','POST'])
 @login_required
 def edit_album(id):
-    form = AlbumForm()
-
     album = models.Album.query.get(id)
     tracks = models.Track.query.filter_by(album_id=album.id).all()
+
+    isFavourited = False
+    for favourite in current_user.favourite_albums:
+        if favourite.id == album.id:
+            isFavourited = True
 
     form = AlbumForm(obj=album)
 
@@ -128,7 +133,8 @@ def edit_album(id):
     return render_template('album.html',
                             form=form,
                             album=album,
-                            tracks=tracks)
+                            tracks=tracks,
+                            isFavourited=isFavourited)
 
 # Delete
 @app.route('/delete_album/<int:id>', methods=['GET','POST'])
@@ -215,11 +221,28 @@ def delete_track(id):
 
 # Favourite AJAX handler
 
-# @app.route('/favourite', methods=['POST'])
-# def favourite():
-#     data = json.loads(request.data)
+@app.route('/favourite', methods=['POST'])
+def favourite():
+    data = json.loads(request.data)
 
-#     user = models.User.query.get(int(data.get('user_id')))
-#     album = models.Album.query.get(int(data.get('album_id')))
+    user = models.User.query.get(int(data.get('user_id')))
+    album = models.Album.query.get(int(data.get('album_id')))
 
-#     if album.
+    exists = False
+    for favourite in user.favourite_albums:
+        if favourite.id == album.id:
+            exists = True
+
+    if (exists):
+        user.favourite_albums.remove(album)
+        db.session.commit()
+        favourited = False
+    else:
+        user.favourite_albums.append(album)
+        db.session.commit()
+        favourited = True
+
+    return json.dumps({
+        'status': 'OK',
+        'favourited': favourited
+    })

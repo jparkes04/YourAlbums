@@ -9,11 +9,13 @@ $(document).ready(function () {
             }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function(response){
-                console.log(response);
+            success: function(response) {
+                if (response.favourited) {
+                    $("#favourite").text("Favourited!");
+                } else {
+                    $("#favourite").text("Favourite");
+                }
 
-                $("#favourite").text("Favourited!");
-                console.log("Favourited!");
                 $("#favourite").toggleClass("button-favourite button-unfavourite");
             },
             error: function(error) {
@@ -21,6 +23,4 @@ $(document).ready(function () {
             }
         });
     });
-
-    //$("#favourite").hasClass("button-unfavourite"
 });

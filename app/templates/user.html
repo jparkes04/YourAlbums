@@ -7,7 +7,24 @@
     </div>
     
     <div class="row justify-content-center">
+        <h2>Your Favourite Albums</h2>
+    </div>
 
+    <div class="row justify-content-center">
+        {% if favourites %}
+            {% for favourite in favourites %}
+                <div class="card m-1" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ favourite.title }}</h5>
+                        <p class="card-text">{{ favourite.artist }}</p>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ favourite.year }}</h6>
+                        <a href="/album/{{favourite.id}}" class="card-link">View</a>
+                    </div>
+                </div>
+                {% endfor %}
+        {% else %}
+            <p>You don't have any favourite albums currently. Go add some!</p>
+        {% endif %}
     </div>
 </div>
 

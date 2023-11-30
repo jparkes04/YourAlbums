@@ -79,8 +79,27 @@
         </div>
 
         <!-- FAVOURITING -->
-        <!-- class: button-favourite or button-unfavourite depending on the current favourite state -->
-        <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourite</a>
+        {% if isFavourited %}
+            <a id="favourite" class="btn button-unfavourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourited!</a>
+        {% else %}
+            <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourite</a>
+        {% endif %}
+
+        <!-- Ohter users who favourite this album -->
+        <div class="row justify-content-center">
+            <h4>Other users who favourite this album</h4>
+        </div>
+
+        <div class="row justify-content-center">
+            <ul>
+                {% for user in album.favourited_by_users %}
+                    {% if user.username != current_user.username %}
+                    <li>{{ user.username }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
     {% endif %}
 </div>
 
