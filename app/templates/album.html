@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 
 <div class="container">
@@ -45,7 +46,7 @@
 
         <div class="row justify-content-left">
             <!-- Add track button -->
-            <a href="/track" class="btn btn-primary">Add Track</a>
+            <a href="/track/{{album.id}}" class="btn btn-primary">Add Track</a>
         </div>
 
         <div class="row justify-content-center">
@@ -55,21 +56,31 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
-                        <th scope="col text-right">Runtime</th>
-                        <th scope="col text-right"></th>
+                        <th scope="col" class="text-right">Runtime</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for track in tracks %}
                     <tr>
                         <th scope="row">{{ track.position }}</th>
-                        <td>{{ track.name }}</td>
-                        <td class="text-right">{{ track.runtime }}</td>
+                        <td>{{ track.trackname }}</td>
+                        <!-- https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters -->
+                        <!-- format track runtime correctly -->
+                        <td class="text-right">{{ (track.runtime / 60)|round(0, 'floor')|int }}:{{ "{:02d}".format(track.runtime % 60) }}</td>
+                        <td class="text-right">
+                            <p><a href="/edit_track/{{track.id}}">Edit</a> |
+                            <a href="/delete_track/{{track.id}}">Delete</a></p>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+
+        <!-- FAVOURITING -->
+        <!-- class: button-favourite or button-unfavourite depending on the current favourite state -->
+        <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourite</a>
     {% endif %}
 </div>
 

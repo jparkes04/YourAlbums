@@ -13,3 +13,14 @@
 .content-margin {
     margin-top: 30px;
 }
+
+.button-unfavourite {
+    background-color: pink;
+
+}
+
+.button-favourite {
+    border-color: pink;
+    border-style: solid;
+
+}

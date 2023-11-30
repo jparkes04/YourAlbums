@@ -25,3 +25,17 @@ class AlbumForm(FlaskForm):
         'Year of Release: ',
         validators=[NumberRange(min=0)]
     )
+
+class TrackForm(FlaskForm):
+    position = IntegerField(
+        'Position: ',
+        validators=[DataRequired(), NumberRange(min=0)]
+    )
+    trackname = StringField(
+        'Title: ',
+        validators=[DataRequired()]
+    )
+    runtime = IntegerField(
+        'Runtime (sec): ',
+        validators=[DataRequired(), NumberRange(min=0)]
+    )

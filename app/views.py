@@ -1,7 +1,8 @@
 from flask import render_template, flash, request, redirect
 from app import app, db, models, login_manager
 from flask_login import login_user, login_required, logout_user, current_user
-from .forms import FlaskForm, RegisterLoginForm, AlbumForm
+from .forms import FlaskForm, RegisterLoginForm, AlbumForm, TrackForm
+import json
 
 # Authentication
 
@@ -98,7 +99,7 @@ def create_album():
         db.session.add(album)
         db.session.commit()
 
-        flash(f'Album {album.title} added to database!')
+        flash(f'Album "{album.title}" added to database!')
         return redirect(f'/album/{album.id}')
 
     return render_template('album.html',
@@ -137,3 +138,88 @@ def delete_album(id):
     db.session.delete(album)
     db.session.commit()
     return albums()
+
+# Tracks
+
+# Create
+@app.route('/track/<int:albumid>', methods=['GET','POST'])
+@login_required
+def create_track(albumid):
+    album = models.Album.query.get(albumid)
+
+    # Generate suggestion for next position
+    tracks = models.Track.query.filter_by(album_id=album.id).all()
+    if (tracks):
+        positions = []
+        for existingTrack in tracks:
+            positions.append(existingTrack.position)
+        nextpos = max(positions) + 1 
+    else:
+        nextpos = 1
+
+    form = TrackForm()
+    form.position.data=nextpos
+
+    if form.validate_on_submit():
+        track = models.Track(
+            position=form.position.data,
+            trackname=form.trackname.data,
+            runtime=form.runtime.data,
+            album_id=albumid
+        )
+
+        db.session.add(track)
+        db.session.commit()
+
+        flash(f'Track "{track.trackname}" added to album "{album.title}"!')
+        return redirect(f'/album/{album.id}')
+
+    return render_template('track.html',
+                            album=album,
+                            form=form,
+                            nextpos=nextpos)
+
+# Edit
+@app.route('/edit_track/<int:id>', methods=['GET','POST'])
+@login_required
+def edit_track(id):
+    form = TrackForm()
+
+    track = models.Track.query.get(id)
+    album = models.Album.query.get(track.album_id)
+
+    form = TrackForm(obj=track)
+
+    if form.validate_on_submit():
+        track.position=form.position.data
+        track.trackname=form.trackname.data
+        track.runtime=form.runtime.data
+
+        db.session.commit()
+
+        flash('Track updated!')
+        return redirect(f'/album/{track.album_id}')
+
+    return render_template('track.html',
+                            form=form,
+                            album=album)
+
+# Delete
+@app.route('/delete_track/<int:id>', methods=['GET','POST'])
+@login_required
+def delete_track(id):
+    track = models.Track.query.get(id)
+    db.session.delete(track)
+    db.session.commit()
+    return redirect(f'/album/{track.album_id}')
+
+# Favourite AJAX handler
+
+# @app.route('/favourite', methods=['POST'])
+# def favourite():
+#     data = json.loads(request.data)
+
+#     user = models.User.query.get(int(data.get('user_id')))
+#     album = models.Album.query.get(int(data.get('album_id')))
+
+#     if album.
