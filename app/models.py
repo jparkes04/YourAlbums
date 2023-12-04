@@ -20,7 +20,7 @@ favourites_association_table = db.Table(
 class User(db.Model, UserMixin):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(500))
+    username = db.Column(db.String(500), unique=True)
     password = db.Column(db.String(500))
     favourite_albums = db.relationship('Album', secondary=favourites_association_table, lazy='dynamic')
 

@@ -38,6 +38,10 @@ def login():
 def register():
     form = RegisterLoginForm()
     if form.validate_on_submit():
+        # Check that the username is not already taken
+        if models.User.query.filter_by(username=form.username.data).first():
+            flash('That username has already been taken. Please choose another one!')
+            return redirect('/login')
 
         # Add new user to db
         user = models.User(
