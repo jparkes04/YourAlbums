@@ -25,14 +25,14 @@
 <body>
 	<!-- Navigation bar -->
 	<!-- https://getbootstrap.com/docs/4.0/components/navbar/ -->
-	<nav class="navbar navbar-expand-sm navbar-light bg-light">
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 		<a class="navbar-brand" href="/">YourAlbums</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 			aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav">
+			<ul class="navbar-nav mr-auto">
 				<!-- Permanent elements -->
 				<li class="nav-item">
 					<a class="nav-link" href="/">Home</a>
@@ -41,7 +41,8 @@
 				<li class="nav-item">
 					<a class="nav-link" href="/albums">Albums</a>
 				</li>
-				
+			</ul>
+			<ul class="navbar-nav">
 				<!-- Conditional elements -->
 				{% if current_user.is_authenticated %}
 					<!-- User is signed in -->

@@ -5,23 +5,35 @@
     <div class="row justify-content-center">
         <h1>Albums</h1>
     </div>
+
+    {% if not current_user.is_authenticated %}
+        <div class="row justify-content-center">
+            <p><a href="/login">Login</a> for actions.</p>
+        </div>
+    {% endif %}
     
     <!-- Display all albums as a grid of cards -->
     <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
     <div class="row justify-content-center">
     
-        <!-- Button card for adding album -->
-        <a type="button" class="btn btn-primary m-1" style="width: 18rem;" href="/album">+ Add Album</a>
+        {% if current_user.is_authenticated %}
+            <!-- Button card for adding album -->
+            <a type="button" class="btn btn-add-album m-1" href="/album">Add Album</a>
+        {% endif %}
 
         <!-- List albums -->
         {% for album in albums %}
-            <div class="card m-1" style="width: 18rem;">
+            <div class="card m-1">
                 <div class="card-body">
                     <h5 class="card-title">{{ album.title }}</h5>
                     <p class="card-text">{{ album.artist }}</p>
                     <h6 class="card-subtitle mb-2 text-muted">{{ album.year }}</h6>
-                    <a href="/album/{{album.id}}" class="card-link">Edit</a>
-                    <a href="/delete_album/{{album.id}}" class="card-link">Delete</a>
+                    {% if current_user.is_authenticated %}
+                        <a href="/album/{{album.id}}" class="card-link">View</a>
+                        <a href="/delete_album/{{album.id}}" class="card-link">Delete</a>
+                    {% endif %}
+
+                    
                 </div>
             </div>
         {% endfor %}

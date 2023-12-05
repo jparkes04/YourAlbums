@@ -23,7 +23,7 @@ class AlbumForm(FlaskForm):
     )
     year = IntegerField(
         'Year of Release: ',
-        validators=[NumberRange(min=0)]
+        validators=[DataRequired(), NumberRange(min=0)]
     )
 
 class TrackForm(FlaskForm):

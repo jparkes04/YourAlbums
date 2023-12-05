@@ -1,3 +1,16 @@
+h1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 .alert-banner {
     background-color: lightblue;
     border-color: rgb(146, 206, 226);
@@ -14,13 +27,68 @@
     margin-top: 30px;
 }
 
-.button-unfavourite {
-    background-color: pink;
 
+.button-unfavourite {
+    border-style: solid;
+    background: rgb(228, 165, 6);
+    background: linear-gradient(45deg, rgb(255, 196, 48) 0%, rgb(255,186,0) 78%); 
 }
 
 .button-favourite {
-    border-color: pink;
+    border-color: rgb(255,186,0);
     border-style: solid;
+}
 
+.btn-add-album {
+    padding-top: 65px;
+    padding-bottom: 65px;
+    font-size: 22px;
+    width: 18rem;
+    border: none;
+    color: white;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0,161,255,1) 100%);
+}
+
+.btn-add-track {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 10px;
+    width: 10rem;
+    border: none;
+    color: white;
+    background: rgb(0, 0, 0);
+    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0,161,255,1) 100%);
+}
+
+.btn-add-album:hover {
+    color: rgb(231, 231, 231);
+    background: rgb(0, 0, 0);
+    background: linear-gradient(45deg, rgb(34, 27, 180) 0%,rgb(17, 168, 255) 100%);
+}
+
+.btn-add-track:hover {
+    color: rgb(231, 231, 231);
+    background: rgb(0, 0, 0);
+    background: linear-gradient(45deg, rgb(34, 27, 180) 0%,rgb(17, 168, 255) 100%);
+}
+
+.card {
+    width: 18rem;
+}
+
+.scroll-window {
+    overflow: scroll;
+    height: 250px;
+}
+
+.list-group {
+    width: 400px;
+    margin-bottom: 15px;
+}
+
+.btn-save {
+    margin-bottom: 25px;
+    color: white;
+    background: rgb(13, 156, 20);
 }

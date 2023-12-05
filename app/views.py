@@ -16,6 +16,13 @@ def load_user(user_id):
 def login():
     form = RegisterLoginForm()
     if form.validate_on_submit():
+        # Validate that username and password were entered
+        if form.username.data == "":
+            flash('Please enter a username to login.')
+            return redirect('/login')
+        if form.password.data == "":
+            flash('Please enter a password to login.')
+            return redirect('/login')
 
         user = models.User.query.filter_by(username=form.username.data).first()
 
@@ -38,6 +45,14 @@ def login():
 def register():
     form = RegisterLoginForm()
     if form.validate_on_submit():
+        # Validate that username and password were entered
+        if form.username.data == "":
+            flash('Please enter a username to register.')
+            return redirect('/register')
+        if form.password.data == "":
+            flash('Please enter a password to register.')
+            return redirect('/register')
+
         # Check that the username is not already taken
         if models.User.query.filter_by(username=form.username.data).first():
             flash('That username has already been taken. Please choose another one!')
@@ -96,6 +111,21 @@ def create_album():
     form = AlbumForm()
 
     if form.validate_on_submit():
+        # Validate that title and artist are present
+        if form.title.data == "":
+            flash('Please enter the album\'s title.')
+            return redirect('/album')
+        if form.artist.data == "":
+            flash('Please enter the artist name.')
+            return redirect('/album')
+        # Validate that year exists and is at least zero
+        if not form.year.data:
+            flash('Please enter a year of release.')
+            return redirect('/album')
+        if form.year.data < 0:
+            flash('Please enter a year of release of at least 0.')
+            return redirect('/album')
+
         album = models.Album(
             title=form.title.data,
             artist=form.artist.data,
@@ -126,6 +156,21 @@ def edit_album(id):
     form = AlbumForm(obj=album)
 
     if form.validate_on_submit():
+        # Validate that title and artist are present
+        if form.title.data == "":
+            flash('Please enter the album\'s title.')
+            return redirect(f'/album/{id}')
+        if form.artist.data == "":
+            flash('Please enter the artist name.')
+            return redirect(f'/album/{id}')
+        # Validate that year exists and is at least zero
+        if not form.year.data:
+            flash('Please enter a year of release.')
+            return redirect('/album')
+        if form.year.data < 0:
+            flash('Please enter a year of release of at least 0.')
+            return redirect('/album')
+
         album.title=form.title.data
         album.artist=form.artist.data
         album.year=form.year.data
@@ -171,6 +216,25 @@ def create_track(albumid):
     form.position.data=nextpos
 
     if form.validate_on_submit():
+        # Validate that title was entered
+        if form.trackname.data == "":
+            flash('Please enter the track name.')
+            return redirect(f'/track/{albumid}')
+        # Validate that position exists and is greater than 0
+        if not form.position.data:
+            flash('Please enter track position.')
+            return redirect(f'/track/{albumid}')
+        if form.position.data <= 0:
+            flash('Please enter a position greater than 0.')
+            return redirect(f'/track/{albumid}')
+        # Validate that runtime exists and is at least 0
+        if not form.runtime.data:
+            flash('Please enter a runtime.')
+            return redirect(f'/track/{albumid}')
+        if form.runtime.data < 0:
+            flash('Please enter a runtime of at least 0.')
+            return redirect(f'/track/{albumid}')
+
         track = models.Track(
             position=form.position.data,
             trackname=form.trackname.data,
@@ -201,6 +265,25 @@ def edit_track(id):
     form = TrackForm(obj=track)
 
     if form.validate_on_submit():
+        # Validate that title was entered
+        if form.trackname.data == "":
+            flash('Please enter the track name.')
+            return redirect(f'/edit_track/{id}')
+        # Validate that position exists and is greater than 0
+        if not form.position.data:
+            flash('Please enter track position.')
+            return redirect(f'/edit_track/{id}')
+        if form.position.data <= 0:
+            flash('Please enter a position greater than 0.')
+            return redirect(f'/edit_track/{id}')
+        # Validate that runtime exists and is at least 0
+        if not form.runtime.data:
+            flash('Please enter a runtime.')
+            return redirect(f'/edit_track/{id}')
+        if form.runtime.data < 0:
+            flash('Please enter a runtime of at least 0.')
+            return redirect(f'/edit_track/{id}')
+
         track.position=form.position.data
         track.trackname=form.trackname.data
         track.runtime=form.runtime.data
@@ -215,6 +298,7 @@ def edit_track(id):
                             album=album)
 
 # Delete
+
 @app.route('/delete_track/<int:id>', methods=['GET','POST'])
 @login_required
 def delete_track(id):
