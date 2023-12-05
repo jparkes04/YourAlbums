@@ -1,3 +1,5 @@
+<!-- https://www.flaticon.com/free-icons/no-image" - No image icons created by LAFS - Flaticon -->
+
 {% extends "base.html" %}
 {% block content %}
 
@@ -12,20 +14,30 @@
         </div>
     {% endif %}
     
+    {% if current_user.is_authenticated %}
+        <div class="row justify-content-center">
+            <!-- Button card for adding album -->
+            <a type="button" class="btn btn-add-album" href="/album">Add New</a>
+        </div>
+    {% endif %}
+
     <!-- Display all albums as a grid of cards -->
     <!-- https://getbootstrap.com/docs/4.0/components/card/ -->
     <div class="row justify-content-center">
     
-        {% if current_user.is_authenticated %}
-            <!-- Button card for adding album -->
-            <a type="button" class="btn btn-add-album m-1" href="/album">Add Album</a>
-        {% endif %}
-
         <!-- List albums -->
         {% for album in albums %}
             <div class="card m-1">
                 <div class="card-body">
                     <h5 class="card-title">{{ album.title }}</h5>
+                    
+                    <!-- Conditionally show album cover if URL is present -->
+                    {% if album.imgurl %}
+                        <img src="{{ album.imgurl }}" alt="Album cover" class="image rounded">
+                    {% else %}
+                        <img src="../static/picture.png" alt="No album cover" class="image rounded">
+                    {% endif %}
+
                     <p class="card-text">{{ album.artist }}</p>
                     <h6 class="card-subtitle mb-2 text-muted">{{ album.year }}</h6>
                     {% if current_user.is_authenticated %}

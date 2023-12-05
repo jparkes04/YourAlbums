@@ -3,6 +3,7 @@ from app import app, db, models, login_manager
 from flask_login import login_user, login_required, logout_user, current_user
 from .forms import FlaskForm, RegisterLoginForm, AlbumForm, TrackForm
 import json
+import logging
 
 # Authentication
 
@@ -30,15 +31,18 @@ def login():
         # No user
         if user is None:
             flash('User account not found! Please register an account first.')
+            app.logger.info(f'User attempted to log into account which does not exist.')
             return redirect('/login')
 
         # Wrong password
         if user.password != form.password.data:
             flash('Incorrect password, please try again.')
+            app.logger.info(f'User "{user.username}" entered the incorrect password.')
             return redirect('/login')
 
         login_user(user)
         flash('Successfully logged in!')
+        app.logger.info(f'User "{user.username}" logged in successfully.')
         return redirect('/')
 
     return render_template('login.html',
@@ -60,6 +64,7 @@ def register():
         # Check that the username is not already taken
         if models.User.query.filter_by(username=form.username.data).first():
             flash('That username has already been taken. Please choose another one!')
+            app.logger.info(f'User failed to register account with existing userame "{form.username.data}".')
             return redirect('/login')
 
         # Add new user to db
@@ -70,6 +75,7 @@ def register():
         db.session.commit()
 
         flash('Account registered successfully!')
+        app.logger.info(f'New user "{form.username.data}" registered account.')
         return redirect('/login')
 
     return render_template('register.html',
@@ -80,6 +86,7 @@ def register():
 @login_required
 def logout():
     logout_user()
+    app.logger.info(f'User logged out.')
     return redirect('/')
 
 # Views
@@ -143,6 +150,7 @@ def create_album():
         album = models.Album(
             title=form.title.data,
             artist=form.artist.data,
+            imgurl=form.imgurl.data,
             year=form.year.data
         )
 
@@ -150,6 +158,8 @@ def create_album():
         db.session.commit()
 
         flash(f'Album "{album.title}" added to database!')
+        app.logger.info(f'Album "{album.title}" added to database.')
+
         return redirect(f'/album/{album.id}')
 
     return render_template('album.html',
@@ -192,10 +202,12 @@ def edit_album(id):
 
         album.title = form.title.data
         album.artist = form.artist.data
+        album.imgurl = form.imgurl.data
         album.year = form.year.data
         db.session.commit()
 
         flash('Album updated!')
+        app.logger.info(f'Album "{album.title}" updated.')
         return redirect(f'/album/{id}')
 
     return render_template('album.html',
@@ -211,6 +223,7 @@ def edit_album(id):
 @login_required
 def delete_album(id):
     album = models.Album.query.get(id)
+    app.logger.info(f'Album "{album.title}" deleted.')
     db.session.delete(album)
     db.session.commit()
     return albums()
@@ -271,6 +284,7 @@ def create_track(albumid):
         db.session.commit()
 
         flash(f'Track "{track.trackname}" added to album "{album.title}"!')
+        app.logger.info(f'Track "{track.trackname}" added to album "{album.title}"')
         return redirect(f'/album/{album.id}')
 
     return render_template('track.html',
@@ -318,6 +332,7 @@ def edit_track(id):
         db.session.commit()
 
         flash('Track updated!')
+        app.logger.info(f'Track "{track.trackname}" updated.')
         return redirect(f'/album/{track.album_id}')
 
     return render_template('track.html',
@@ -331,6 +346,7 @@ def edit_track(id):
 @login_required
 def delete_track(id):
     track = models.Track.query.get(id)
+    app.logger.info(f'Track "{track.trackname}" deleted.')
     db.session.delete(track)
     db.session.commit()
     return redirect(f'/album/{track.album_id}')
@@ -356,11 +372,13 @@ def favourite():
         user.favourite_albums.remove(album)
         db.session.commit()
         favourited = False
+        app.logger.info(f'User "{user.username}" removed favourite album "{album.title}"')
     else:
         # If it doesn't, add favourite and save
         user.favourite_albums.append(album)
         db.session.commit()
         favourited = True
+        app.logger.info(f'User "{user.username}" added favourite album "{album.title}"')
 
     # Return new state
     return json.dumps({

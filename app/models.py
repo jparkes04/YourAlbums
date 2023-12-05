@@ -33,6 +33,7 @@ class Album(db.Model):
     title = db.Column(db.String(500))
     artist = db.Column(db.String(500))
     year = db.Column(db.Integer)
+    imgurl = db.Column(db.String(500))
     tracks = db.relationship('Track', backref='album', lazy='dynamic')
     favourited_by_users = db.relationship(
         'User', secondary=favourites_association_table, lazy='dynamic')

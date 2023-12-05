@@ -35,14 +35,22 @@
                 </div>
 
                 <div class="form-group">
-                    {{ form.year.label }}
-                    {{ form.year(
+                    {{ form.imgurl.label }}
+                    {{ form.imgurl(
                         class="form-control",
                         tabindex=3
                     ) }}
                 </div>
 
-                <input type="submit" class="form-control btn-save" tabindex=4 value="Save" />
+                <div class="form-group">
+                    {{ form.year.label }}
+                    {{ form.year(
+                        class="form-control",
+                        tabindex=4
+                    ) }}
+                </div>
+
+                <input type="submit" class="form-control btn-save" tabindex=5 value="Save" />
             </form>
         </div>
 

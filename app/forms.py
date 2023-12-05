@@ -23,6 +23,9 @@ class AlbumForm(FlaskForm):
         'Artist Name: ',
         validators=[DataRequired()]
     )
+    imgurl = StringField(
+        'Image URL: '
+    )
     year = IntegerField(
         'Year of Release: ',
         validators=[DataRequired(), NumberRange(min=0)]

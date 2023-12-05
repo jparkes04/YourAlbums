@@ -1,3 +1,5 @@
+<!-- https://www.flaticon.com/free-icons/no-image" - No image icons created by LAFS - Flaticon -->
+
 {% extends "base.html" %}
 {% block content %}
 
@@ -16,6 +18,14 @@
                 <div class="card m-1" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{ favourite.title }}</h5>
+
+                        <!-- Conditionally show album cover if URL is present -->
+                        {% if favourite.imgurl %}
+                            <img src="{{ favourite.imgurl }}" alt="Album cover" class="image rounded">
+                        {% else %}
+                            <img src="../static/picture.png" alt="No album cover" class="image rounded">
+                        {% endif %}
+
                         <p class="card-text">{{ favourite.artist }}</p>
                         <h6 class="card-subtitle mb-2 text-muted">{{ favourite.year }}</h6>
                         <a href="/album/{{favourite.id}}" class="card-link">View</a>
