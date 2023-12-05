@@ -12,7 +12,6 @@
 
     <div class="row justify-content-center">
         {% if favourites %}
-            
             {% for favourite in favourites %}
                 <div class="card m-1" style="width: 18rem;">
                     <div class="card-body">
@@ -22,7 +21,7 @@
                         <a href="/album/{{favourite.id}}" class="card-link">View</a>
                     </div>
                 </div>
-                {% endfor %}
+            {% endfor %}
         {% else %}
             <p>You don't have any favourite albums currently. Go add some!</p>
         {% endif %}

@@ -11,6 +11,7 @@ h4 {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 .alert-banner {
     background-color: lightblue;
     border-color: rgb(146, 206, 226);
@@ -31,11 +32,11 @@ h4 {
 .button-unfavourite {
     border-style: solid;
     background: rgb(228, 165, 6);
-    background: linear-gradient(45deg, rgb(255, 196, 48) 0%, rgb(255,186,0) 78%); 
+    background: linear-gradient(45deg, rgb(255, 196, 48) 0%, rgb(255, 186, 0) 78%);
 }
 
 .button-favourite {
-    border-color: rgb(255,186,0);
+    border-color: rgb(255, 186, 0);
     border-style: solid;
 }
 
@@ -47,7 +48,7 @@ h4 {
     border: none;
     color: white;
     background: rgb(0, 0, 0);
-    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0,161,255,1) 100%);
+    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0, 161, 255, 1) 100%);
 }
 
 .btn-add-track {
@@ -58,19 +59,19 @@ h4 {
     border: none;
     color: white;
     background: rgb(0, 0, 0);
-    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0,161,255,1) 100%);
+    background: linear-gradient(45deg, rgb(6, 0, 112) 0%, rgba(0, 161, 255, 1) 100%);
 }
 
 .btn-add-album:hover {
     color: rgb(231, 231, 231);
     background: rgb(0, 0, 0);
-    background: linear-gradient(45deg, rgb(34, 27, 180) 0%,rgb(17, 168, 255) 100%);
+    background: linear-gradient(45deg, rgb(34, 27, 180) 0%, rgb(17, 168, 255) 100%);
 }
 
 .btn-add-track:hover {
     color: rgb(231, 231, 231);
     background: rgb(0, 0, 0);
-    background: linear-gradient(45deg, rgb(34, 27, 180) 0%,rgb(17, 168, 255) 100%);
+    background: linear-gradient(45deg, rgb(34, 27, 180) 0%, rgb(17, 168, 255) 100%);
 }
 
 .card {

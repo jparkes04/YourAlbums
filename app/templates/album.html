@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-
 {% block content %}
 
 <div class="container">
     <div class="row justify-content-center">
         <h1>Album</h1>
     </div>
-    
+
     <div class="row justify-content-center">
 
         {% if album %}
@@ -23,15 +22,15 @@
                     {{ form.title.label }}
                     {{ form.title(
                         class="form-control",
-                        tabindex=1    
+                        tabindex=1
                     ) }}
                 </div>
-        
+
                 <div class="form-group">
                     {{ form.artist.label }}
                     {{ form.artist(
                         class="form-control",
-                        tabindex=2    
+                        tabindex=2
                     ) }}
                 </div>
 
@@ -39,11 +38,11 @@
                     {{ form.year.label }}
                     {{ form.year(
                         class="form-control",
-                        tabindex=3   
+                        tabindex=3
                     ) }}
                 </div>
-        
-                <input type="submit" class="form-control btn-save" tabindex=4 value="Save"/>
+
+                <input type="submit" class="form-control btn-save" tabindex=4 value="Save" />
             </form>
         </div>
 
@@ -53,9 +52,11 @@
                 <div class="row justify-content-center">
                     <!-- Favourite button -->
                     {% if isFavourited %}
-                        <a id="favourite" class="btn button-unfavourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourited!</a>
+                        <a id="favourite" class="btn button-unfavourite" data-userid="{{ current_user.id }}"
+                            data-albumid="{{ album.id }}">Favourited!</a>
                     {% else %}
-                        <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}" data-albumid="{{ album.id }}">Favourite</a>
+                        <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}"
+                            data-albumid="{{ album.id }}">Favourite</a>
                     {% endif %}
                 </div>
 
@@ -68,7 +69,7 @@
                     <ul class="list-group">
                         {% for user in album.favourited_by_users %}
                             {% if user.username != current_user.username %}
-                            <li class="list-group-item">{{ user.username }}</li>
+                                <li class="list-group-item">{{ user.username }}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -76,10 +77,10 @@
 
             </div>
         {% endif %}
-    </div>
+        </div>
 
-    <!-- Track list -->
-    {% if album %}
+        <!-- Track list -->
+        {% if album %}
         <div class="row-lg justify-content-left">
             <h2>Tracks</h2>
         </div>
@@ -107,17 +108,19 @@
                         <td>{{ track.trackname }}</td>
                         <!-- https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters -->
                         <!-- format track runtime correctly -->
-                        <td class="text-right">{{ (track.runtime / 60)|round(0, 'floor')|int }}:{{ "{:02d}".format(track.runtime % 60) }}</td>
+                        <td class="text-right">{{ (track.runtime / 60)|round(0, 'floor')|int }}:{{
+                            "{:02d}".format(track.runtime % 60) }}</td>
                         <td class="text-right">
                             <p><a href="/edit_track/{{track.id}}">Edit</a> |
-                            <a href="/delete_track/{{track.id}}">Delete</a></p>
+                                <a href="/delete_track/{{track.id}}">Delete</a>
+                            </p>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-    {% endif %}
-</div>
+        {% endif %}
+    </div>
 
-{% endblock %}
+    {% endblock %}

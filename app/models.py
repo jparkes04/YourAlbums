@@ -1,6 +1,7 @@
 from app import db
 from flask_login import UserMixin
 
+
 class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position = db.Column(db.Integer)
@@ -22,7 +23,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(500), unique=True)
     password = db.Column(db.String(500))
-    favourite_albums = db.relationship('Album', secondary=favourites_association_table, lazy='dynamic')
+    favourite_albums = db.relationship(
+        'Album', secondary=favourites_association_table, lazy='dynamic')
 
 
 class Album(db.Model):
@@ -32,4 +34,5 @@ class Album(db.Model):
     artist = db.Column(db.String(500))
     year = db.Column(db.Integer)
     tracks = db.relationship('Track', backref='album', lazy='dynamic')
-    favourited_by_users = db.relationship('User', secondary=favourites_association_table, lazy='dynamic')
+    favourited_by_users = db.relationship(
+        'User', secondary=favourites_association_table, lazy='dynamic')

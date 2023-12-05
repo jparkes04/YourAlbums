@@ -6,13 +6,13 @@ import json
 
 # Authentication
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return models.User.query.get(user_id)
-    # check this returns none and not an exception if the user does not exist
-    #return User.get(user_id)
 
-@app.route('/login', methods=['GET','POST'])
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = RegisterLoginForm()
     if form.validate_on_submit():
@@ -24,12 +24,15 @@ def login():
             flash('Please enter a password to login.')
             return redirect('/login')
 
+        # Find user with matching username
         user = models.User.query.filter_by(username=form.username.data).first()
 
+        # No user
         if user is None:
             flash('User account not found! Please register an account first.')
             return redirect('/login')
 
+        # Wrong password
         if user.password != form.password.data:
             flash('Incorrect password, please try again.')
             return redirect('/login')
@@ -40,6 +43,7 @@ def login():
 
     return render_template('login.html',
                            form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -72,7 +76,7 @@ def register():
                            form=form)
 
 
-@app.route('/logout', methods=['GET','POST'])
+@app.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
     logout_user()
@@ -80,15 +84,21 @@ def logout():
 
 # Views
 
+# Homepage
+
+
 @app.route('/')
 def home():
+    # Show user page if user is logged in
+    # Otherwise, show home page.
     if current_user.is_authenticated:
         return user()
     return render_template('home.html')
 
 # User
 
-@app.route('/user', methods=['GET','POST'])
+
+@app.route('/user', methods=['GET', 'POST'])
 @login_required
 def user():
     favourites = current_user.favourite_albums.all()
@@ -97,15 +107,18 @@ def user():
 
 # Albums
 
+
 @app.route('/albums')
 def albums():
     albums = models.Album.query.all()
 
     return render_template('albums.html',
-                            albums=albums)
+                           albums=albums)
 
 # Create
-@app.route('/album', methods=['GET','POST'])
+
+
+@app.route('/album', methods=['GET', 'POST'])
 @login_required
 def create_album():
     form = AlbumForm()
@@ -126,6 +139,7 @@ def create_album():
             flash('Please enter a year of release of at least 0.')
             return redirect('/album')
 
+        # Create album and add to db
         album = models.Album(
             title=form.title.data,
             artist=form.artist.data,
@@ -139,15 +153,20 @@ def create_album():
         return redirect(f'/album/{album.id}')
 
     return render_template('album.html',
-                            form=form)
+                           form=form)
 
 # Edit
-@app.route('/album/<int:id>', methods=['GET','POST'])
+
+
+@app.route('/album/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_album(id):
+    # Get album and its tracks
     album = models.Album.query.get(id)
     tracks = models.Track.query.filter_by(album_id=album.id).all()
 
+    # Determine if album is favourited to display correct
+    # state on favourite button on page load
     isFavourited = False
     for favourite in current_user.favourite_albums:
         if favourite.id == album.id:
@@ -171,22 +190,24 @@ def edit_album(id):
             flash('Please enter a year of release of at least 0.')
             return redirect('/album')
 
-        album.title=form.title.data
-        album.artist=form.artist.data
-        album.year=form.year.data
+        album.title = form.title.data
+        album.artist = form.artist.data
+        album.year = form.year.data
         db.session.commit()
 
         flash('Album updated!')
         return redirect(f'/album/{id}')
 
     return render_template('album.html',
-                            form=form,
-                            album=album,
-                            tracks=tracks,
-                            isFavourited=isFavourited)
+                           form=form,
+                           album=album,
+                           tracks=tracks,
+                           isFavourited=isFavourited)
 
 # Delete
-@app.route('/delete_album/<int:id>', methods=['GET','POST'])
+
+
+@app.route('/delete_album/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_album(id):
     album = models.Album.query.get(id)
@@ -197,23 +218,26 @@ def delete_album(id):
 # Tracks
 
 # Create
-@app.route('/track/<int:albumid>', methods=['GET','POST'])
+
+
+@app.route('/track/<int:albumid>', methods=['GET', 'POST'])
 @login_required
 def create_track(albumid):
     album = models.Album.query.get(albumid)
 
     # Generate suggestion for next position
+    # By finding current max and adding 1
     tracks = models.Track.query.filter_by(album_id=album.id).all()
     if (tracks):
         positions = []
         for existingTrack in tracks:
             positions.append(existingTrack.position)
-        nextpos = max(positions) + 1 
+        nextpos = max(positions) + 1
     else:
         nextpos = 1
 
     form = TrackForm()
-    form.position.data=nextpos
+    form.position.data = nextpos
 
     if form.validate_on_submit():
         # Validate that title was entered
@@ -235,6 +259,7 @@ def create_track(albumid):
             flash('Please enter a runtime of at least 0.')
             return redirect(f'/track/{albumid}')
 
+        # Create track and add to db
         track = models.Track(
             position=form.position.data,
             trackname=form.trackname.data,
@@ -249,12 +274,14 @@ def create_track(albumid):
         return redirect(f'/album/{album.id}')
 
     return render_template('track.html',
-                            album=album,
-                            form=form,
-                            nextpos=nextpos)
+                           album=album,
+                           form=form,
+                           nextpos=nextpos)
 
 # Edit
-@app.route('/edit_track/<int:id>', methods=['GET','POST'])
+
+
+@app.route('/edit_track/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_track(id):
     form = TrackForm()
@@ -284,9 +311,9 @@ def edit_track(id):
             flash('Please enter a runtime of at least 0.')
             return redirect(f'/edit_track/{id}')
 
-        track.position=form.position.data
-        track.trackname=form.trackname.data
-        track.runtime=form.runtime.data
+        track.position = form.position.data
+        track.trackname = form.trackname.data
+        track.runtime = form.runtime.data
 
         db.session.commit()
 
@@ -294,12 +321,13 @@ def edit_track(id):
         return redirect(f'/album/{track.album_id}')
 
     return render_template('track.html',
-                            form=form,
-                            album=album)
+                           form=form,
+                           album=album)
 
 # Delete
 
-@app.route('/delete_track/<int:id>', methods=['GET','POST'])
+
+@app.route('/delete_track/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_track(id):
     track = models.Track.query.get(id)
@@ -309,6 +337,7 @@ def delete_track(id):
 
 # Favourite AJAX handler
 
+
 @app.route('/favourite', methods=['POST'])
 def favourite():
     data = json.loads(request.data)
@@ -316,20 +345,24 @@ def favourite():
     user = models.User.query.get(int(data.get('user_id')))
     album = models.Album.query.get(int(data.get('album_id')))
 
+    # Determine if album is already favourited by this user
     exists = False
     for favourite in user.favourite_albums:
         if favourite.id == album.id:
             exists = True
 
     if (exists):
+        # If it does, remove favourite and save
         user.favourite_albums.remove(album)
         db.session.commit()
         favourited = False
     else:
+        # If it doesn't, add favourite and save
         user.favourite_albums.append(album)
         db.session.commit()
         favourited = True
 
+    # Return new state
     return json.dumps({
         'status': 'OK',
         'favourited': favourited

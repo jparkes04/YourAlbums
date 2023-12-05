@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, PasswordField
 from wtforms.validators import DataRequired, NumberRange
 
+
 class RegisterLoginForm(FlaskForm):
     username = StringField(
         'Username: ',
@@ -11,6 +12,7 @@ class RegisterLoginForm(FlaskForm):
         'Password: ',
         validators=[DataRequired()]
     )
+
 
 class AlbumForm(FlaskForm):
     title = StringField(
@@ -25,6 +27,7 @@ class AlbumForm(FlaskForm):
         'Year of Release: ',
         validators=[DataRequired(), NumberRange(min=0)]
     )
+
 
 class TrackForm(FlaskForm):
     position = IntegerField(

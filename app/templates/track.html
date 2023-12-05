@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <h1>Track</h1>
     </div>
-    
+
     <div class="row justify-content-center">
         <div class="col-4">
             <!-- Add track form -->
@@ -15,7 +15,7 @@
                     {{ form.position.label }}
                     {{ form.position(
                         class="form-control",
-                        tabindex=1    
+                        tabindex=1
                     ) }}
                 </div>
 
@@ -23,7 +23,7 @@
                     {{ form.trackname.label }}
                     {{ form.trackname(
                         class="form-control",
-                        tabindex=2 
+                        tabindex=2
                     ) }}
                 </div>
 
@@ -34,10 +34,10 @@
                         tabindex=3
                     ) }}
                 </div>
-        
-                <input type="submit" class="form-control btn-save" tabindex=4 value="Save"/>
+
+                <input type="submit" class="form-control btn-save" tabindex=4 value="Save" />
             </form>
         </div>
     </div>
 
-{% endblock %}
+    {% endblock %}
