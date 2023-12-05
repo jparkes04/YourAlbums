@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h1>Album</h1>
+    </div>
+
+    <div class="row justify-content-center">
+
+        {% if album %}
+            <div class="col-md">
+        {% else %}
+            <div class="col-5">
+        {% endif %}
+            <!-- Album details -->
+            <h2>Details</h2>
+
+            <form action="" method="post" name="album">
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                    {{ form.title.label }}
+                    {{ form.title(
+                        class="form-control",
+                        tabindex=1
+                    ) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.artist.label }}
+                    {{ form.artist(
+                        class="form-control",
+                        tabindex=2
+                    ) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.imgurl.label }}
+                    {{ form.imgurl(
+                        class="form-control",
+                        tabindex=3
+                    ) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.year.label }}
+                    {{ form.year(
+                        class="form-control",
+                        tabindex=4
+                    ) }}
+                </div>
+
+                <input type="submit" class="form-control btn-save" tabindex=5 value="Save" />
+            </form>
+        </div>
+
+        {% if album %}
+            <div class="col-md">
+
+                <div class="row justify-content-center">
+                    <!-- Favourite button -->
+                    {% if isFavourited %}
+                        <a id="favourite" class="btn button-unfavourite" data-userid="{{ current_user.id }}"
+                            data-albumid="{{ album.id }}">Favourited!</a>
+                    {% else %}
+                        <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}"
+                            data-albumid="{{ album.id }}">Favourite</a>
+                    {% endif %}
+                </div>
+
+                <!-- Other users who favourite this album -->
+                <div class="row justify-content-center">
+                    <h4>Other users who favourite this album</h4>
+                </div>
+
+                <div class="row justify-content-center scroll-window">
+                    <ul class="list-group">
+                        {% for user in album.favourited_by_users %}
+                            {% if user.username != current_user.username %}
+                                <li class="list-group-item">{{ user.username }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+        {% endif %}
+        </div>
+
+        <!-- Track list -->
+        {% if album %}
+        <div class="row-lg justify-content-left">
+            <h2>Tracks</h2>
+        </div>
+
+        <div class="row-lg justify-content-left">
+            <!-- Add track button -->
+            <a href="/track/{{album.id}}" class="btn btn-add-track">Add Track</a>
+        </div>
+
+        <div class="row-lg justify-content-center">
+            <!-- Table of tracks -->
+            <table class="table table-responsive-md">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col" class="text-right">Runtime</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for track in tracks %}
+                    <tr>
+                        <th scope="row">{{ track.position }}</th>
+                        <td>{{ track.trackname }}</td>
+                        <!-- https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters -->
+                        <!-- format track runtime correctly -->
+                        <td class="text-right">{{ (track.runtime / 60)|round(0, 'floor')|int }}:{{
+                            "{:02d}".format(track.runtime % 60) }}</td>
+                        <td class="text-right">
+                            <p><a href="/edit_track/{{track.id}}">Edit</a> |
+                                <a href="/delete_track/{{track.id}}">Delete</a>
+                            </p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+    {% endblock %}
