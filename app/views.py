@@ -65,7 +65,7 @@ def register():
         if models.User.query.filter_by(username=form.username.data).first():
             flash('That username has already been taken. Please choose another one!')
             app.logger.info(f'User failed to register account with existing userame "{form.username.data}".')
-            return redirect('/login')
+            return redirect('/register')
 
         # Add new user to db
         user = models.User(
