@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    // Allows favourite button to be activated by hitting enter whilst selected
+    // For accessibility
+    $("#favourite").keypress(function(e) {
+        if (e.keyCode == 13) { // keycode 13 is enter key
+            $("#favourite").click();
+        }
+    });
+
     $("#favourite").on("click", function () {
         $.ajax({
             url: '/favourite',
