@@ -61,10 +61,10 @@
                     <!-- Favourite button -->
                     {% if isFavourited %}
                         <a id="favourite" class="btn button-unfavourite" data-userid="{{ current_user.id }}"
-                            data-albumid="{{ album.id }}">Favourited!</a>
+                            data-albumid="{{ album.id }}" tabindex=6>Favourited!</a>
                     {% else %}
                         <a id="favourite" class="btn button-favourite" data-userid="{{ current_user.id }}"
-                            data-albumid="{{ album.id }}">Favourite</a>
+                            data-albumid="{{ album.id }} tabindex=6">Favourite</a>
                     {% endif %}
                 </div>
 
@@ -95,7 +95,7 @@
 
         <div class="row-lg justify-content-left">
             <!-- Add track button -->
-            <a href="/track/{{album.id}}" class="btn btn-add-track">Add Track</a>
+            <a href="/track/{{album.id}}" class="btn btn-add-track" tabindex=7>Add Track</a>
         </div>
 
         <div class="row-lg justify-content-center">
